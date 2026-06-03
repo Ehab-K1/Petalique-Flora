@@ -1,27 +1,28 @@
 import Link from 'next/link';
 import type { Product } from '@/lib/types';
 import { money } from '@/lib/pricing';
-import { Placeholder } from './Placeholder';
+import { ProductImage } from './ProductImage';
+import { ReviewStars } from './ReviewStars';
+import { aggregateFor } from '@/lib/reviews';
 
 export function ProductCard({ product, eager = false }: { product: Product; eager?: boolean }) {
+  const agg = aggregateFor(product.slug);
   return (
-    <Link href={`/bouquets/${product.slug}`} className="product-card card-hover" aria-label={product.name}>
+    <Link href={`/bouquets/${product.slug}`} className="product-card product-card-v2" aria-label={product.name}>
       <div className="product-card-media">
-        <Placeholder label={product.shotLabel} tone={product.imageTone} caption={product.blurb} />
+        <ProductImage slug={product.slug} alt={`${product.name} bouquet`} priority={eager} ratio="4/5" />
         {product.badges?.[0] && <span className="product-badge badge">{product.badges[0]}</span>}
+        <span className="product-card-cta" aria-hidden="true">View bouquet</span>
       </div>
       <div className="product-card-body">
-        <div className="between" style={{ alignItems: 'baseline', gap: 12 }}>
-          <h3 className="display" style={{ fontSize: 22, lineHeight: 1.1 }}>
-            {product.name}
-          </h3>
-          <span className="display" style={{ fontSize: 18, whiteSpace: 'nowrap' }}>
-            from {money(product.basePrice)}
-          </span>
+        <div className="product-card-row">
+          <h3 className="product-card-name">{product.name}</h3>
+          <span className="product-card-price">from {money(product.basePrice)}</span>
         </div>
-        <p className="display-italic muted" style={{ fontSize: 14, marginTop: 2 }}>
-          {product.latin}
-        </p>
+        <div className="product-card-meta">
+          <ReviewStars rating={agg.rating} count={agg.count} size={12} showNumber={false} />
+          <span className="product-card-rating">{agg.rating.toFixed(1)} · {agg.count.toLocaleString('en-CA')} reviews</span>
+        </div>
       </div>
     </Link>
   );
