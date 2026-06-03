@@ -27,8 +27,10 @@ export function Nav() {
   useEffect(() => setMounted(true), []);
   useEffect(() => setOpen(false), [pathname]);
 
-  // Scroll-aware nav: shrink + solidify past the fold, hide on scroll-down,
-  // reveal on scroll-up. Stays visible whenever the drawer is open.
+  // On the homepage the hero is dark, so the nav adopts a dark-transparent
+  // style until the user scrolls past the hero section (~100vh).
+  const isHome = pathname === '/';
+
   useEffect(() => {
     let last = window.scrollY;
     const onScroll = () => {
@@ -41,8 +43,11 @@ export function Nav() {
     return () => window.removeEventListener('scroll', onScroll);
   }, [open]);
 
+  // dark = home AND above the fold (hero is 100vh)
+  const isDark = isHome && !scrolled;
+
   return (
-    <header className={`nav ${scrolled ? 'is-scrolled' : ''} ${hidden ? 'is-hidden' : ''}`}>
+    <header className={`nav ${scrolled ? 'is-scrolled' : ''} ${hidden ? 'is-hidden' : ''} ${isDark ? 'is-dark' : ''}`}>
       <div className="container nav-inner">
         <Wordmark href="/" size={24} />
 

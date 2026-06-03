@@ -40,6 +40,15 @@ export default function HomePage() {
     <>
       <Hero />
 
+      {/* ── Dark manifesto bridge ─────────────────────────────────────────── */}
+      <section className="section-sm bg-noir on-dark" style={{ textAlign: 'center' }}>
+        <div className="container">
+          <p className="pull" style={{ maxWidth: '22ch', margin: '0 auto' }}>
+            Flowers are how love <em style={{ color: '#d87888' }}>sounds out loud</em>.
+          </p>
+        </div>
+      </section>
+
       {/* ── Trust band ─────────────────────────────────────────────────────── */}
       <section className="section-sm bg-bone">
         <div className="container">

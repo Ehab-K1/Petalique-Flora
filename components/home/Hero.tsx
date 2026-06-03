@@ -1,108 +1,126 @@
 'use client';
 
-// Cinematic hero. A tall section with a sticky stage: scroll progress drives the
-// rose's `bloom` (bud → full open) while the intro copy lifts away and a
-// manifesto line scrubs in. This is the homepage's signature sequence.
+// Cinematic dark hero. The layout mirrors the direction reference: warm-black
+// stage, editorial headline left, large rose illustration right, vertical
+// "SCROLL TO UNFOLD" side indicator. GSAP drives the rose parallax and the
+// initial bloom-in (no Three.js — no SSR crash, no WebGL requirement).
 
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useReducedMotion } from 'motion/react';
-import { RoseStage } from '@/components/three/RoseStage';
+import { RoseIllustration } from './RoseIllustration';
 import { TextReveal } from '@/components/motion/TextReveal';
 import { Magnetic } from '@/components/motion/Magnetic';
 
 export function Hero() {
-  const bloomRef = useRef(0.08);
-  const sectionRef = useRef<HTMLElement>(null);
-  const introRef = useRef<HTMLDivElement>(null);
-  const manifestoRef = useRef<HTMLDivElement>(null);
-  const reduce = useReducedMotion();
+  const sectionRef  = useRef<HTMLElement>(null);
+  const roseRef     = useRef<SVGSVGElement>(null);
+  const introRef    = useRef<HTMLDivElement>(null);
+  const reduce      = useReducedMotion();
 
   useEffect(() => {
-    if (reduce) {
-      bloomRef.current = 0.62;
-      return;
-    }
     gsap.registerPlugin(ScrollTrigger);
-    const section = sectionRef.current;
-    if (!section) return;
 
     const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: section,
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: true,
-        onUpdate: (self) => {
-          bloomRef.current = 0.08 + self.progress * 0.92;
-        },
-      });
+      if (!reduce) {
+        // ── Bloom-in on mount ──────────────────────────────────────────────
+        // Each petal layer appears in sequence (outer → inner), creating the
+        // sense of a flower opening as the page loads.
+        const layers = roseRef.current?.querySelectorAll('[data-petal-layer]');
+        if (layers?.length) {
+          gsap.from(Array.from(layers), {
+            opacity: 0,
+            scale: 0.6,
+            transformOrigin: 'center 85%',
+            duration: 1.4,
+            ease: 'back.out(1.4)',
+            stagger: { amount: 1.2, from: 'start' },
+            delay: 0.25,
+          });
+        }
 
-      gsap
-        .timeline({
-          scrollTrigger: { trigger: section, start: 'top top', end: 'bottom bottom', scrub: 0.6 },
-        })
-        .to(introRef.current, { opacity: 0, y: -70, filter: 'blur(8px)', ease: 'none' }, 0.32)
-        .fromTo(
-          manifestoRef.current,
-          { opacity: 0, y: 50 },
-          { opacity: 1, y: 0, ease: 'none' },
-          0.46,
-        )
-        .to(manifestoRef.current, { opacity: 0, y: -30, ease: 'none' }, 0.86);
-    }, section);
+        // ── Idle breathe ──────────────────────────────────────────────────
+        gsap.to(roseRef.current, {
+          scale: 1.03,
+          duration: 3.8,
+          ease: 'sine.inOut',
+          yoyo: true,
+          repeat: -1,
+          transformOrigin: 'center center',
+        });
+
+        // ── Scroll: rose drifts up, intro copy fades ───────────────────────
+        ScrollTrigger.create({
+          trigger: sectionRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1.2,
+          onUpdate: (self) => {
+            const p = self.progress;
+            gsap.set(roseRef.current, { y: p * -100 });
+            gsap.set(introRef.current, { opacity: 1 - p * 1.8, y: p * -60 });
+          },
+        });
+      }
+    }, sectionRef);
 
     return () => ctx.revert();
   }, [reduce]);
 
   return (
-    <section className="cine-hero" ref={sectionRef}>
-      <div className="cine-hero-sticky">
-        <div className="cine-hero-stage">
-          <RoseStage bloomRef={bloomRef} />
-        </div>
-        <div className="cine-hero-veil" />
+    <section className="dk-hero" ref={sectionRef}>
+      {/* Decorative background: radial light pool behind the rose */}
+      <div className="dk-hero-glow" aria-hidden="true" />
 
-        <div className="container cine-hero-overlay">
-          <div className="cine-intro" ref={introRef}>
-            <div className="eyebrow" style={{ marginBottom: 22 }}>
-              <span className="dot">●</span> Canadian luxury floral house
-            </div>
-            <TextReveal
-              as="h1"
-              className="h-hero cine-hero-h1"
-              text="For the moments worth *dressing* *up* for."
-            />
-            <p className="body-lg cine-hero-lede">
-              A floral house for gifting, weekly subscriptions, weddings and wholesale — designed
-              with an editorial eye, delivered with a family&rsquo;s warmth.
-            </p>
-            <div className="hero-cta-row">
-              <Magnetic>
-                <Link href="/bouquets" className="btn btn-lg">
-                  Shop bouquets
-                </Link>
-              </Magnetic>
-              <Magnetic>
-                <Link href="/subscriptions" className="btn btn-lg btn-ghost">
-                  Weekly flowers
-                </Link>
-              </Magnetic>
-            </div>
-            <div className="cine-scrollcue">
-              <span className="mono">Scroll</span>
-              <span className="cine-scrollcue-line" />
-            </div>
-          </div>
-
-          <div className="cine-manifesto" ref={manifestoRef} aria-hidden={reduce ? 'true' : undefined}>
-            <p className="pull cine-manifesto-line">
-              Flowers are how love <em>sounds out loud</em>.
-            </p>
-          </div>
+      {/* Left column: editorial copy */}
+      <div className="dk-hero-text" ref={introRef}>
+        <div className="eyebrow dk-eyebrow">
+          <span className="dot" style={{ color: '#d87888' }}>●</span>{' '}
+          Canadian luxury floral house
         </div>
+
+        <TextReveal
+          as="h1"
+          className="h-hero dk-hero-h1"
+          text="For the moments worth *dressing* *up* for."
+        />
+
+        <p className="body-lg dk-hero-lede">
+          A floral house for gifting, weekly subscriptions, weddings and
+          wholesale&nbsp;— designed with an editorial eye, delivered with a
+          family&rsquo;s warmth.
+        </p>
+
+        <div className="hero-cta-row">
+          <Magnetic>
+            <Link href="/bouquets" className="btn btn-lg dk-btn-primary">
+              Shop bouquets
+            </Link>
+          </Magnetic>
+          <Magnetic>
+            <Link href="/subscriptions" className="btn btn-lg dk-btn-ghost">
+              Weekly flowers
+            </Link>
+          </Magnetic>
+        </div>
+
+        {/* Animated scroll cue */}
+        <div className="dk-scrollcue" aria-hidden="true">
+          <span className="mono">Scroll</span>
+          <span className="dk-scrollcue-line" />
+        </div>
+      </div>
+
+      {/* Right column: the rose */}
+      <div className="dk-hero-rose-col">
+        <RoseIllustration ref={roseRef} className="dk-rose" />
+      </div>
+
+      {/* Vertical "SCROLL TO UNFOLD" side indicator */}
+      <div className="dk-side-label" aria-hidden="true">
+        <span className="mono">Scroll to unfold</span>
       </div>
     </section>
   );
