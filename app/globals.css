@@ -24,6 +24,7 @@
   --ember: #8a4a3f;
   --ember-deep: #6b3128;
   --aubergine: #2e1f2a;
+  --noir: #14110d;
   --hairline: rgba(31, 27, 22, 0.14);
   --hairline-soft: rgba(31, 27, 22, 0.08);
 
@@ -170,7 +171,9 @@ em { font-style: italic; color: var(--ember); }
 .bg-cream { background: var(--cream); }
 .bg-paper { background: var(--paper); }
 .bg-aubergine { background: var(--aubergine); color: var(--bone); }
+.bg-noir { background: var(--noir); color: var(--bone); }
 .bg-dark { background: #17130f; color: var(--bone); }
+.on-dark .marker, .bg-noir .marker { color: rgba(239, 232, 221, 0.55); }
 .on-dark { color: var(--bone); }
 .on-dark .body, .on-dark .body-lg { color: rgba(239, 232, 221, 0.8); }
 .on-dark .caption, .on-dark .marker { color: rgba(239, 232, 221, 0.55); }
@@ -343,3 +346,18 @@ em { font-style: italic; color: var(--ember); }
 .center-text { text-align: center; }
 .maxch { max-width: 60ch; } .maxch-70 { max-width: 70ch; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+/* ===== Film grain (cinematic texture) ===== */
+.grain {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  opacity: 0.32; mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
+}
+@media (prefers-reduced-motion: reduce) { .grain { display: none; } }
+
+/* ===== Lenis smooth scroll ===== */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }

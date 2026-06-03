@@ -1,23 +1,36 @@
 import Link from 'next/link';
+import { Hero } from '@/components/home/Hero';
+import { FiveLines } from '@/components/home/FiveLines';
 import { Placeholder } from '@/components/Placeholder';
 import { TrustBar } from '@/components/TrustBar';
 import { ProductCard } from '@/components/ProductCard';
 import { Reveal } from '@/components/Reveal';
-import { PetalMark } from '@/components/PetalMark';
+import { TextReveal } from '@/components/motion/TextReveal';
+import { Parallax } from '@/components/motion/Parallax';
+import { Magnetic } from '@/components/motion/Magnetic';
 import { PRODUCTS, bestSellers } from '@/lib/catalog';
 
-const LINES = [
-  { k: '01', n: 'Weddings & Events', d: 'Bouquets, ceremony & reception florals, installations and décor.', entry: 'Consult-led', cta: 'Book a consult', href: '/weddings' },
-  { k: '02', n: 'Gifting', d: 'Named bouquets and gift boxes, same-day across the GTA.', entry: 'From $90', cta: 'Send flowers', href: '/bouquets' },
-  { k: '03', n: 'Corporate & Subscriptions', d: 'Weekly arrangements for offices, lobbies, hotels & restaurants — one monthly fee.', entry: 'From $240/mo', cta: 'Start a plan', href: '/corporate' },
-  { k: '04', n: 'Wholesale', d: 'Fresh stems by the bunch or box for florists, planners & studios.', entry: 'Trade pricing', cta: 'Open an account', href: '/wholesale' },
-  { k: '05', n: 'Lived Spaces', d: 'Standing home arrangements and seasonal styling for the table you live at.', entry: 'From $120', cta: 'Style my space', href: '/subscriptions' },
-];
+type Tone = 'blush' | 'ember' | 'sage' | 'cream' | 'aubergine';
 
-const SIGNATURES = [
-  { n: 'The Engraved Ribbon', d: 'Every bouquet ships with a silk ribbon, foil-stamped with two letters, a date, or a single word. The keepsake after the petals are gone.' },
-  { n: 'The Quiet Box', d: 'Matte stone outer, ivory dust cover, a sealed wax stamp. Opens with one motion. Photographs without trying.' },
-  { n: 'The 9-Minute Doorstep', d: 'The driver waits up to nine minutes, sends a discreet SMS, then leaves a sealed box. Standard, not premium.' },
+const SIGNATURES: { n: string; d: string; tone: Tone; shot: string }[] = [
+  {
+    n: 'The Engraved Ribbon',
+    d: 'Every bouquet ships with a silk ribbon, foil-stamped with two letters, a date, or a single word. The keepsake after the petals are gone.',
+    tone: 'ember',
+    shot: 'Foil-stamped silk ribbon · 3:2 · macro',
+  },
+  {
+    n: 'The Quiet Box',
+    d: 'Matte stone outer, ivory dust cover, a sealed wax stamp. Opens with one motion. Photographs without trying.',
+    tone: 'aubergine',
+    shot: 'Sealed window box, wax stamp · 3:2',
+  },
+  {
+    n: 'The 9-Minute Doorstep',
+    d: 'The driver waits up to nine minutes, sends a discreet SMS, then leaves a sealed box. Standard, not premium.',
+    tone: 'sage',
+    shot: 'Box at the door · 3:2 · dusk',
+  },
 ];
 
 export default function HomePage() {
@@ -25,38 +38,11 @@ export default function HomePage() {
 
   return (
     <>
-      {/* ── Hero ───────────────────────────────────────────────────────────── */}
-      <section className="hero">
+      <Hero />
+
+      {/* ── Trust band ─────────────────────────────────────────────────────── */}
+      <section className="section-sm bg-bone">
         <div className="container">
-          <div className="hero-grid">
-            <div className="hero-copy">
-              <div className="eyebrow" style={{ marginBottom: 22 }}>
-                <span className="dot">●</span> Canadian luxury floral house
-              </div>
-              <h1 className="h-hero serif-em">
-                For the moments worth <em>dressing&nbsp;up</em> for.
-              </h1>
-              <p className="body-lg hero-lede">
-                A Canadian floral house for gifting, weekly subscriptions, weddings and wholesale —
-                designed with an editorial eye and delivered with a family’s warmth.
-              </p>
-              <div className="hero-cta-row">
-                <Link href="/bouquets" className="btn btn-lg">
-                  Shop bouquets
-                </Link>
-                <Link href="/subscriptions" className="btn btn-lg btn-ghost">
-                  Weekly flowers
-                </Link>
-              </div>
-            </div>
-            <div className="hero-media">
-              <Placeholder
-                label="Bouquet of the week · 4:5 portrait · single window light"
-                tone="blush"
-                ratio="4 / 5"
-              />
-            </div>
-          </div>
           <TrustBar />
         </div>
       </section>
@@ -73,25 +59,27 @@ export default function HomePage() {
                 </div>
               </div>
               <div>
-                <h2 className="h1">The ones we send most.</h2>
-                <p className="body-lg maxch">
+                <TextReveal as="h2" className="h1" text="The ones we send most." />
+                <p className="body-lg maxch" style={{ marginTop: 14 }}>
                   Rose-count led, priced in the open, same-day across the GTA. Choose a bouquet as it
                   is, or open it up and make it yours.
                 </p>
               </div>
             </header>
           </Reveal>
-          <Reveal delay={80}>
-            <div className="product-grid">
-              {sellers.map((p) => (
-                <ProductCard key={p.slug} product={p} />
-              ))}
-            </div>
-          </Reveal>
+          <div className="product-grid">
+            {sellers.map((p, i) => (
+              <Reveal key={p.slug} delay={(i % 4) * 70}>
+                <ProductCard product={p} />
+              </Reveal>
+            ))}
+          </div>
           <div className="center" style={{ justifyContent: 'center', marginTop: 'var(--s-7)' }}>
-            <Link href="/bouquets" className="btn btn-ghost">
-              See all bouquets
-            </Link>
+            <Magnetic>
+              <Link href="/bouquets" className="btn btn-ghost">
+                See all bouquets
+              </Link>
+            </Magnetic>
           </div>
         </div>
       </section>
@@ -100,30 +88,22 @@ export default function HomePage() {
       <section className="section bg-cream">
         <div className="container">
           <Reveal>
-            <div className="eyebrow" style={{ marginBottom: 10 }}>
+            <div className="eyebrow" style={{ marginBottom: 14 }}>
               <span className="dot">●</span> Five lines · one signature
             </div>
-            <h2 className="h1" style={{ maxWidth: '16ch', marginBottom: 'var(--s-7)' }}>
-              One trusted house for the gift, the plan, the event and the trade order.
-            </h2>
+            <TextReveal
+              as="h2"
+              className="h1"
+              text="One house for the gift, the plan, the event and the trade order."
+            />
           </Reveal>
-          <div className="lines-band">
-            {LINES.map((b, i) => (
-              <Reveal key={b.k} delay={i * 60}>
-                <Link href={b.href} className="line-item">
-                  <span className="mono line-k">{b.k}</span>
-                  <span className="display line-n">{b.n}</span>
-                  <span className="caption line-d">{b.d}</span>
-                  <span className="mono line-entry">{b.entry}</span>
-                  <span className="link-underline line-cta">{b.cta} →</span>
-                </Link>
-              </Reveal>
-            ))}
+          <div style={{ marginTop: 'var(--s-8)' }}>
+            <FiveLines />
           </div>
         </div>
       </section>
 
-      {/* ── Signature experiences ──────────────────────────────────────────── */}
+      {/* ── Signature experiences (editorial zig-zag) ──────────────────────── */}
       <section className="section bg-bone">
         <div className="container">
           <Reveal>
@@ -135,23 +115,29 @@ export default function HomePage() {
                 </div>
               </div>
               <div>
-                <h2 className="h1">Not just the flower — the memory of it.</h2>
+                <TextReveal as="h2" className="h1" text="Not just the flower — the *memory* of it." />
               </div>
             </header>
           </Reveal>
-          <div className="col-3">
+
+          <div className="signatures">
             {SIGNATURES.map((s, i) => (
-              <Reveal key={s.n} delay={i * 70}>
-                <div className="card card-hover" style={{ height: '100%' }}>
-                  <PetalMark size={22} />
-                  <h3 className="h3" style={{ marginTop: 16 }}>
+              <div className={`signature-row ${i % 2 ? 'is-flipped' : ''}`} key={s.n}>
+                <div className="signature-media">
+                  <Parallax speed={0.16}>
+                    <Placeholder label={s.shot} tone={s.tone} ratio="3 / 2" />
+                  </Parallax>
+                </div>
+                <Reveal className="signature-copy" delay={80}>
+                  <div className="mono signature-idx">{String(i + 1).padStart(2, '0')}</div>
+                  <h3 className="h2" style={{ marginTop: 10 }}>
                     {s.n}
                   </h3>
-                  <p className="body" style={{ marginTop: 8 }}>
+                  <p className="body-lg" style={{ marginTop: 14, maxWidth: '44ch' }}>
                     {s.d}
                   </p>
-                </div>
-              </Reveal>
+                </Reveal>
+              </div>
             ))}
           </div>
         </div>
@@ -160,20 +146,29 @@ export default function HomePage() {
       {/* ── Testimonial ────────────────────────────────────────────────────── */}
       <section className="section bg-aubergine on-dark">
         <div className="container">
-          <Reveal>
-            <div className="testimonial">
-              <div className="eyebrow" style={{ color: 'rgba(239,232,221,0.55)', marginBottom: 20 }}>
-                <span className="dot">●</span> A note we kept
-              </div>
-              <blockquote className="pull on-dark">
-                “For Sana, the morning of. White anemones, almond branches, a knot of taupe silk. The
-                driver waited at the door for nine minutes — she couldn’t <em>stop looking</em>.”
-              </blockquote>
-              <p className="mono" style={{ marginTop: 24, color: 'rgba(239,232,221,0.55)', letterSpacing: '0.18em', textTransform: 'uppercase', fontSize: 11 }}>
-                Amara & Sana · wedding, June
-              </p>
+          <div className="testimonial">
+            <div className="eyebrow" style={{ color: 'rgba(239,232,221,0.55)', marginBottom: 22 }}>
+              <span className="dot">●</span> A note we kept
             </div>
-          </Reveal>
+            <Reveal>
+              <blockquote className="pull on-dark cine-quote">
+                For Sana, the morning of. White anemones, almond branches, a knot of taupe silk. The
+                driver waited at the door for nine minutes — she couldn&rsquo;t <em>stop looking</em>.
+              </blockquote>
+            </Reveal>
+            <p
+              className="mono"
+              style={{
+                marginTop: 28,
+                color: 'rgba(239,232,221,0.55)',
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                fontSize: 11,
+              }}
+            >
+              Amara &amp; Sana · wedding, June
+            </p>
+          </div>
         </div>
       </section>
 
@@ -181,27 +176,32 @@ export default function HomePage() {
       <section className="section bg-bone">
         <div className="container">
           <div className="founder">
-            <Reveal>
-              <Placeholder label="Founder at the market · 3:2 · morning light" tone="ember" ratio="3 / 2" />
-            </Reveal>
+            <div className="founder-media">
+              <Parallax speed={0.2}>
+                <Placeholder label="Founder at the market · 3:2 · morning light" tone="ember" ratio="3 / 2" />
+              </Parallax>
+            </div>
             <Reveal delay={80}>
               <div className="founder-copy">
                 <div className="eyebrow" style={{ marginBottom: 14 }}>
                   <span className="dot">●</span> The house
                 </div>
-                <h2 className="h2 serif-em">
-                  Founded by a family that knows weddings the way other families know{' '}
-                  <em>harvests</em>.
-                </h2>
+                <TextReveal
+                  as="h2"
+                  className="h2"
+                  text="Founded by a family that knows weddings the way other families know *harvests*."
+                />
                 <p className="body-lg" style={{ marginTop: 20, maxWidth: '46ch' }}>
-                  Petalique Flora is built on the belief that flowers are how love sounds out loud —
-                  and that a bouquet, well-made, can hold a whole room still for a second. One
-                  editorial eye, one standard of care, from a $90 gift to a $90,000 install.
+                  Petalique Flora is built on the belief that a bouquet, well-made, can hold a whole
+                  room still for a second. One editorial eye, one standard of care, from a $90 gift to
+                  a $90,000 install.
                 </p>
                 <div style={{ marginTop: 26 }}>
-                  <Link href="/atelier" className="btn btn-ghost">
-                    Meet the atelier
-                  </Link>
+                  <Magnetic>
+                    <Link href="/atelier" className="btn btn-ghost">
+                      Meet the atelier
+                    </Link>
+                  </Magnetic>
                 </div>
               </div>
             </Reveal>
@@ -214,21 +214,23 @@ export default function HomePage() {
         <div className="container">
           <div className="cta-band">
             <div>
-              <h2 className="h2" style={{ maxWidth: '20ch' }}>
-                Make it a standing order.
-              </h2>
+              <TextReveal as="h2" className="h2" text="Make it a standing order." />
               <p className="body-lg" style={{ marginTop: 12, maxWidth: '44ch' }}>
                 Weekly flowers for the home, the office, the lobby — one monthly invoice, paused any
                 time. Our most quietly loved service.
               </p>
             </div>
             <div className="center gap-3 wrap">
-              <Link href="/subscriptions" className="btn btn-sage btn-lg">
-                Home subscriptions
-              </Link>
-              <Link href="/corporate" className="btn btn-ghost btn-lg">
-                For business
-              </Link>
+              <Magnetic>
+                <Link href="/subscriptions" className="btn btn-sage btn-lg">
+                  Home subscriptions
+                </Link>
+              </Magnetic>
+              <Magnetic>
+                <Link href="/corporate" className="btn btn-ghost btn-lg">
+                  For business
+                </Link>
+              </Magnetic>
             </div>
           </div>
         </div>

@@ -5,6 +5,7 @@ import './components.css';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { Concierge } from '@/components/Concierge';
+import { SmoothScroll } from '@/components/motion/SmoothScroll';
 
 const display = Cormorant_Garamond({
   subsets: ['latin'],
@@ -67,10 +68,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main" className="sr-only">
           Skip to content
         </a>
-        <Nav />
-        <main id="main">{children}</main>
-        <Footer />
-        <Concierge />
+        <div className="grain" aria-hidden="true" />
+        <SmoothScroll>
+          <Nav />
+          <main id="main">{children}</main>
+          <Footer />
+          <Concierge />
+        </SmoothScroll>
       </body>
     </html>
   );
