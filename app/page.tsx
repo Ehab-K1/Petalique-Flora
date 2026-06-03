@@ -3,7 +3,6 @@ import { Placeholder } from '@/components/Placeholder';
 import { TrustBar } from '@/components/TrustBar';
 import { ProductCard } from '@/components/ProductCard';
 import { Reveal } from '@/components/Reveal';
-import { PetalMark } from '@/components/PetalMark';
 import { PRODUCTS, bestSellers } from '@/lib/catalog';
 
 const LINES = [
@@ -143,8 +142,7 @@ export default function HomePage() {
             {SIGNATURES.map((s, i) => (
               <Reveal key={s.n} delay={i * 70}>
                 <div className="card card-hover" style={{ height: '100%' }}>
-                  <PetalMark size={22} />
-                  <h3 className="h3" style={{ marginTop: 16 }}>
+                  <h3 className="h3">
                     {s.n}
                   </h3>
                   <p className="body" style={{ marginTop: 8 }}>

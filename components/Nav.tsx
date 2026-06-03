@@ -4,16 +4,18 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Wordmark } from './Wordmark';
+import { ReviewStars } from './ReviewStars';
 import { useCart } from '@/store/cart';
+import { AGGREGATE } from '@/lib/reviews';
 
 const LINKS = [
   { href: '/bouquets', label: 'Bouquets' },
-  { href: '/build', label: 'Build a bouquet' },
+  { href: '/build', label: 'Build your own' },
   { href: '/subscriptions', label: 'Subscriptions' },
   { href: '/corporate', label: 'Corporate' },
   { href: '/wholesale', label: 'Wholesale' },
   { href: '/weddings', label: 'Weddings' },
-  { href: '/atelier', label: 'Atelier' },
+  { href: '/about', label: 'About' },
 ];
 
 export function Nav() {
@@ -28,7 +30,7 @@ export function Nav() {
   return (
     <header className="nav">
       <div className="container nav-inner">
-        <Wordmark href="/" size={24} />
+        <Wordmark href="/" size={18} />
 
         <nav className="nav-links" aria-label="Primary">
           {LINKS.map((l) => (
@@ -43,12 +45,15 @@ export function Nav() {
         </nav>
 
         <div className="nav-right">
+          <span className="nav-rating" aria-hidden="true">
+            <ReviewStars rating={AGGREGATE.rating} count={AGGREGATE.count} size={12} />
+          </span>
           <Link href="/cart" className="nav-cart" aria-label={`Cart, ${mounted ? count : 0} items`}>
             Cart
             <span className="nav-cart-count">{mounted ? count : 0}</span>
           </Link>
           <Link href="/bouquets" className="btn btn-sm nav-cta">
-            Send flowers
+            Shop now
           </Link>
           <button
             className="nav-burger"

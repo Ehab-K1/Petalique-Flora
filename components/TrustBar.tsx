@@ -1,10 +1,14 @@
 import { cutoffLabel } from '@/lib/sameday';
+import { AGGREGATE } from '@/lib/reviews';
 
-const MARKS = [
-  { k: 'Same-day GTA', v: `Order by ${cutoffLabel()}` },
-  { k: 'Re-bloom guarantee', v: 'Or we remake it' },
-  { k: 'Hand-tied', v: 'Mississauga atelier' },
-  { k: '4.97 ★', v: '1,100+ moments' },
+const MARKS: { k: string; v: string }[] = [
+  { k: 'Same-day across the GTA', v: `Order by ${cutoffLabel()} · delivered tonight` },
+  { k: 'Fresh-flower guarantee', v: 'Not perfect? We remake it within 24 hours.' },
+  { k: 'Hand-tied in Toronto', v: 'Designed in-studio, never warehoused.' },
+  {
+    k: `${AGGREGATE.rating.toFixed(1)} ★ · ${AGGREGATE.count.toLocaleString('en-CA')} reviews`,
+    v: 'Verified buyers across the GTA',
+  },
 ];
 
 export function TrustBar({ className = '' }: { className?: string }) {
@@ -12,8 +16,8 @@ export function TrustBar({ className = '' }: { className?: string }) {
     <div className={`trust-bar ${className}`} role="list">
       {MARKS.map((m) => (
         <div className="trust-mark" role="listitem" key={m.k}>
-          <span className="mono k">{m.k}</span>
-          <span className="caption v">{m.v}</span>
+          <span className="k">{m.k}</span>
+          <span className="v">{m.v}</span>
         </div>
       ))}
     </div>
