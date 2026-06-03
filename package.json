@@ -2,7 +2,7 @@
   "name": "petalique-flora",
   "version": "1.0.0",
   "private": true,
-  "description": "Petalique Flora — Canadian luxury floral house storefront. Built to the Bone & Ember brand system.",
+  "description": "Petalique Flora — same-day flower delivery storefront for the Greater Toronto Area.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

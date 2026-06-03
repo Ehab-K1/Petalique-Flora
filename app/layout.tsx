@@ -1,28 +1,22 @@
 import type { Metadata } from 'next';
-import { Cormorant_Garamond, Manrope, JetBrains_Mono } from 'next/font/google';
+import { Fraunces, Inter } from 'next/font/google';
 import './globals.css';
 import './components.css';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { Concierge } from '@/components/Concierge';
 
-const display = Cormorant_Garamond({
+const display = Fraunces({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
+  weight: ['400', '500', '600'],
   style: ['normal', 'italic'],
   variable: '--font-display',
   display: 'swap',
 });
-const sans = Manrope({
+const sans = Inter({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-sans',
-  display: 'swap',
-});
-const mono = JetBrains_Mono({
-  subsets: ['latin'],
-  weight: ['400', '500'],
-  variable: '--font-mono',
   display: 'swap',
 });
 
@@ -31,22 +25,23 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'Petalique Flora — Canadian luxury floral house',
+    default: 'Petalique Flora — Same-day flower delivery across the GTA',
     template: '%s · Petalique Flora',
   },
   description:
-    'A Canadian luxury floral house for gifting, weekly subscriptions, weddings and wholesale. Same-day across the GTA. For the moments worth dressing up for.',
+    'Order by 2pm for same-day delivery across the Greater Toronto Area. Hand-tied bouquets, weekly subscriptions, weddings and corporate gifts. Backed by a fresh-flower guarantee.',
   keywords: [
-    'luxury florist Toronto',
+    'same-day flower delivery Toronto',
     'GTA flower delivery',
+    'Toronto florist',
     'wedding florist Mississauga',
-    'corporate flowers',
-    'flower subscription',
-    'wholesale flowers',
+    'corporate flowers Toronto',
+    'flower subscription Toronto',
   ],
   openGraph: {
-    title: 'Petalique Flora — Canadian luxury floral house',
-    description: 'For the moments worth dressing up for. Same-day across the GTA.',
+    title: 'Petalique Flora — Same-day flower delivery across the GTA',
+    description:
+      'Order by 2pm for same-day delivery. Hand-tied bouquets, backed by a fresh-flower guarantee.',
     type: 'website',
     locale: 'en_CA',
     siteName: 'Petalique Flora',
@@ -58,11 +53,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      data-palette="orchard"
-      className={`${display.variable} ${sans.variable} ${mono.variable}`}
-    >
+    <html lang="en" className={`${display.variable} ${sans.variable}`}>
       <body>
         <a href="#main" className="sr-only">
           Skip to content
