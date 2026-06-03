@@ -1033,6 +1033,234 @@
 .v2-faq-list details[open] summary::after { content: '–'; }
 .v2-faq-list .body { margin-top: 10px; max-width: 60ch; }
 
+/* ── PDP v2 ───────────────────────────────────────────────────────────────── */
+.pdp-v2 {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: var(--s-8);
+  align-items: start;
+}
+.pdp-v2-gallery {
+  position: sticky;
+  top: 86px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+.pdp-v2-main { width: 100%; }
+.pdp-v2-thumbs {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--s-2);
+}
+.pdp-v2-thumb {
+  position: relative;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-m);
+  padding: 0;
+  background: var(--paper);
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 200ms var(--ease), transform 200ms var(--ease);
+}
+.pdp-v2-thumb .pimg { border-radius: 0; }
+.pdp-v2-thumb.on { border-color: var(--accent); }
+.pdp-v2-thumb:hover { transform: translateY(-1px); }
+
+.pdp-v2-rail { display: flex; flex-direction: column; }
+.pdp-v2-crumb {
+  font-size: 13px;
+  color: var(--ink-mute);
+  margin-bottom: 12px;
+}
+.pdp-v2-crumb a { color: var(--ink); border-bottom: 1px solid transparent; }
+.pdp-v2-crumb a:hover { border-color: var(--accent); color: var(--accent); }
+
+.pdp-v2-name {
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(34px, 4vw, 46px);
+  line-height: 1.05;
+}
+.pdp-v2-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin: 10px 0 4px;
+}
+
+.pdp-v2-pricerow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 10px 0 14px;
+}
+.pdp-v2-price {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.pdp-v2-priceunit { font-size: 13px; color: var(--ink-mute); }
+.pdp-v2-desc { max-width: 52ch; margin-bottom: var(--s-5); }
+
+.pdp-v2-option {
+  padding: var(--s-4) 0;
+  border-top: 1px solid var(--hairline-soft);
+}
+.pdp-v2-option-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+.pdp-v2-option-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.pdp-v2-option-val {
+  font-size: 13px;
+  color: var(--ink-mute);
+}
+
+.pdp-v2-countdown {
+  margin: var(--s-5) 0 var(--s-3);
+  padding: 10px 12px;
+  border-radius: var(--radius-m);
+  background: rgba(31, 77, 61, 0.06);
+}
+
+.pdp-v2-buy {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  margin-top: 6px;
+}
+.pdp-v2-buynow { margin-top: 10px; }
+
+.pdp-v2-trust {
+  list-style: none;
+  padding: 0;
+  margin: var(--s-5) 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-l);
+  padding: var(--s-4) var(--s-5);
+}
+.pdp-v2-trust li { display: flex; flex-direction: column; gap: 2px; }
+.pdp-v2-trust-k { font-size: 13px; font-weight: 600; color: var(--ink); }
+.pdp-v2-trust-v { font-size: 13px; color: var(--ink-mute); }
+
+.pdp-v2-bundle {
+  margin-top: var(--s-7);
+  padding-top: var(--s-6);
+  border-top: 1px solid var(--hairline);
+}
+.pdp-v2-bundle-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s-3);
+  margin: var(--s-4) 0 var(--s-4);
+}
+.pdp-v2-bundle-card {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-l);
+  background: var(--paper);
+}
+.pdp-v2-bundle-card.on { border-color: var(--accent); background: rgba(31, 77, 61, 0.04); }
+.pdp-v2-bundle-card .pimg { border-radius: var(--radius-m); }
+.pdp-v2-bundle-name { font-family: var(--font-display); font-size: 15px; font-weight: 500; color: var(--ink); }
+
+.pdp-v2-reviews {
+  margin-top: var(--s-7);
+  padding-top: var(--s-6);
+  border-top: 1px solid var(--hairline);
+}
+.pdp-v2-reviews-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--s-4);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.pdp-v2-reviews-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-4);
+}
+.pdp-v2-review {
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-l);
+  padding: var(--s-4);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.pdp-v2-review-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.pdp-v2-review-quote {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 0;
+}
+
+@media (max-width: 1000px) {
+  .pdp-v2 { grid-template-columns: 1fr; gap: var(--s-6); }
+  .pdp-v2-gallery { position: static; }
+}
+@media (max-width: 700px) {
+  .pdp-v2-reviews-list { grid-template-columns: 1fr; }
+  .pdp-v2-bundle-row { grid-template-columns: 1fr; }
+  .pdp-v2-thumbs { grid-template-columns: repeat(5, 1fr); }
+}
+
+/* ── Sticky buy bar contents ─────────────────────────────────────────────── */
+.sticky-buy-product {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.sticky-buy-thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-m);
+  overflow: hidden;
+  flex: none;
+}
+.sticky-buy-thumb .pimg { border-radius: 0; }
+.sticky-buy-name { font-family: var(--font-display); font-size: 17px; font-weight: 500; color: var(--ink); line-height: 1.1; }
+.sticky-buy-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.sticky-buy-price { font-family: var(--font-display); font-weight: 500; font-size: 19px; color: var(--ink); }
+@media (max-width: 760px) {
+  .sticky-buy-product .caption { display: none; }
+  .sticky-buy-thumb { width: 44px; height: 44px; }
+}
+
 /* ── Same-day pill v2 ─────────────────────────────────────────────────────── */
 .sameday-dot.live {
   background: var(--accent);
