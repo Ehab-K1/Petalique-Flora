@@ -13,6 +13,7 @@ type Props = {
   as?: 'h1' | 'h2' | 'h3' | 'p' | 'span';
   delay?: number;
   stagger?: number;
+  style?: React.CSSProperties;
 };
 
 const wordV: Variants = {
@@ -23,7 +24,7 @@ const wordV: Variants = {
   }),
 };
 
-export function TextReveal({ text, className = '', as = 'h2', delay = 0 }: Props) {
+export function TextReveal({ text, className = '', as = 'h2', delay = 0, style }: Props) {
   const reduce = useReducedMotion();
   const words = text.split(' ');
   const MotionTag = motion[as];
@@ -37,7 +38,7 @@ export function TextReveal({ text, className = '', as = 'h2', delay = 0 }: Props
   if (reduce) {
     const Tag = as;
     return (
-      <Tag className={className}>
+      <Tag className={className} style={style}>
         {words.map((w, i) => (
           <Fragment key={i}>
             {render(w)}
@@ -51,6 +52,7 @@ export function TextReveal({ text, className = '', as = 'h2', delay = 0 }: Props
   return (
     <MotionTag
       className={className}
+      style={style}
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, amount: 0.4 }}

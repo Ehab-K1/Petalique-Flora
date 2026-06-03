@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { CorporatePlanBuilder } from '@/components/CorporatePlanBuilder';
 import { Placeholder } from '@/components/Placeholder';
 import { Reveal } from '@/components/Reveal';
+import { TextReveal } from '@/components/motion/TextReveal';
 
 export const metadata: Metadata = {
   title: 'Corporate · Offices, hotels, restaurants',
@@ -28,9 +29,12 @@ export default function CorporatePage() {
       <section className="page-head bg-cream">
         <div className="container">
           <div className="marker">05 — Corporate</div>
-          <h1 className="h1 serif-em" style={{ marginTop: 10, maxWidth: '22ch' }}>
-            Reception flowers, <em>handled</em>. One invoice. Quietly.
-          </h1>
+          <TextReveal
+            as="h1"
+            className="h1"
+            style={{ marginTop: 10, maxWidth: '22ch' }}
+            text="Reception flowers, *handled*. One invoice. Quietly."
+          />
           <p className="body-lg maxch" style={{ marginTop: 14 }}>
             A standing weekly or biweekly arrangement designed for the room — your reception, your
             lobby, your private dining. We deliver, we restyle, we leave. You see the invoice once a

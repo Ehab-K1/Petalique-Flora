@@ -10,10 +10,13 @@ export default function Template({ children }: { children: React.ReactNode }) {
   const reduce = useReducedMotion();
   if (reduce) return <>{children}</>;
 
+  // Opacity-only: a transform here would establish a containing block and break
+  // every position:sticky element on the page (hero stage, filter rails, PDP
+  // gallery, plan summaries, the trade cart). Fade is enough to carry continuity.
   return (
     <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
     >
       {children}

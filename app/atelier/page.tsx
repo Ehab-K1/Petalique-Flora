@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Placeholder } from '@/components/Placeholder';
 import { Reveal } from '@/components/Reveal';
+import { TextReveal } from '@/components/motion/TextReveal';
 import { FAQ } from '@/components/FAQ';
 
 export const metadata: Metadata = {
@@ -36,9 +37,12 @@ export default function AtelierPage() {
       <section className="page-head bg-cream">
         <div className="container">
           <div className="marker">08 — Atelier & Journal</div>
-          <h1 className="h1 serif-em" style={{ marginTop: 10, maxWidth: '20ch' }}>
-            The people, the growers, the <em>way we work</em>.
-          </h1>
+          <TextReveal
+            as="h1"
+            className="h1"
+            style={{ marginTop: 10, maxWidth: '20ch' }}
+            text="The people, the growers, the *way we work*."
+          />
           <p className="body-lg maxch" style={{ marginTop: 14 }}>
             A floral house should be the house and the floral, not just the flowers. These are the
             names, the rules and the rituals behind every bouquet that leaves the atelier.

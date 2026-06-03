@@ -45,11 +45,18 @@
 /* ── Nav ──────────────────────────────────────────────────────────────────── */
 .nav {
   position: sticky; top: 0; z-index: 100;
-  background: color-mix(in oklab, var(--bone) 86%, transparent);
-  backdrop-filter: saturate(140%) blur(12px);
-  border-bottom: 1px solid var(--hairline);
+  background: color-mix(in oklab, var(--bone) 70%, transparent);
+  backdrop-filter: saturate(140%) blur(10px);
+  border-bottom: 1px solid transparent;
+  transition: transform 420ms var(--ease), background 320ms var(--ease), border-color 320ms var(--ease);
 }
-.nav-inner { display: flex; align-items: center; justify-content: space-between; gap: var(--s-5); height: 66px; }
+.nav.is-scrolled {
+  background: color-mix(in oklab, var(--bone) 90%, transparent);
+  border-bottom-color: var(--hairline);
+}
+.nav.is-hidden { transform: translateY(-100%); }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; gap: var(--s-5); height: 72px; transition: height 320ms var(--ease); }
+.nav.is-scrolled .nav-inner { height: 60px; }
 .nav-links { display: flex; align-items: center; gap: var(--s-5); flex: 1; justify-content: center; }
 .nav-link { font-size: 13px; color: var(--ink-soft); position: relative; padding: 4px 0; transition: color 250ms var(--ease); white-space: nowrap; }
 .nav-link:hover { color: var(--ember); }
@@ -101,6 +108,10 @@
 /* ── Product card ─────────────────────────────────────────────────────────── */
 .product-card { display: block; }
 .product-card-media { position: relative; border-radius: 14px; overflow: hidden; }
+.product-card-media .ph { transition: transform 700ms var(--ease); }
+.product-card:hover .product-card-media .ph { transform: scale(1.05); }
+.product-card-name-link { transition: color 250ms var(--ease); }
+.product-card:hover .product-card-name-link { color: var(--ember); }
 .product-badge { position: absolute; top: 12px; left: 12px; z-index: 2; }
 .product-card-body { padding: 14px 2px 0; }
 

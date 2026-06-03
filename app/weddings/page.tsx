@@ -4,6 +4,7 @@ import { WEDDING_PACKAGES } from '@/lib/plans';
 import { money } from '@/lib/pricing';
 import { Placeholder } from '@/components/Placeholder';
 import { Reveal } from '@/components/Reveal';
+import { TextReveal } from '@/components/motion/TextReveal';
 
 export const metadata: Metadata = {
   title: 'Weddings & Events',
@@ -24,9 +25,12 @@ export default function WeddingsPage() {
       <section className="page-head bg-cream">
         <div className="container">
           <div className="marker">07 — Weddings & Events</div>
-          <h1 className="h1 serif-em" style={{ marginTop: 10, maxWidth: '22ch' }}>
-            For the days you’ll be looking at the photos of <em>forever</em>.
-          </h1>
+          <TextReveal
+            as="h1"
+            className="h1"
+            style={{ marginTop: 10, maxWidth: '22ch' }}
+            text="For the days you’ll be looking at the photos of *forever*."
+          />
           <p className="body-lg maxch" style={{ marginTop: 14 }}>
             A consult-led floral house for weddings, engagements, Nikkahs, receptions, and the
             celebrations only you have a word for. Pressed and framed after the day, if you’d like.

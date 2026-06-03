@@ -12,7 +12,7 @@ export function ProductCard({ product, eager = false }: { product: Product; eage
       </div>
       <div className="product-card-body">
         <div className="between" style={{ alignItems: 'baseline', gap: 12 }}>
-          <h3 className="display" style={{ fontSize: 22, lineHeight: 1.1 }}>
+          <h3 className="display product-card-name-link" style={{ fontSize: 22, lineHeight: 1.1 }}>
             {product.name}
           </h3>
           <span className="display" style={{ fontSize: 18, whiteSpace: 'nowrap' }}>

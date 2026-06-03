@@ -19,14 +19,30 @@ const LINKS = [
 export function Nav() {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const pathname = usePathname();
   const count = useCart((s) => s.count());
 
   useEffect(() => setMounted(true), []);
   useEffect(() => setOpen(false), [pathname]);
 
+  // Scroll-aware nav: shrink + solidify past the fold, hide on scroll-down,
+  // reveal on scroll-up. Stays visible whenever the drawer is open.
+  useEffect(() => {
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 12);
+      setHidden(y > 240 && y > last && !open);
+      last = y;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [open]);
+
   return (
-    <header className="nav">
+    <header className={`nav ${scrolled ? 'is-scrolled' : ''} ${hidden ? 'is-hidden' : ''}`}>
       <div className="container nav-inner">
         <Wordmark href="/" size={24} />
 
