@@ -65,7 +65,7 @@ export default function CheckoutPage() {
       <div className="container">
         <div className="marker">Checkout</div>
         <h1 className="h1" style={{ marginTop: 8, marginBottom: 'var(--s-6)' }}>
-          Where is it going?
+          Delivery details
         </h1>
 
         <form className="checkout-grid" onSubmit={pay}>
@@ -150,15 +150,22 @@ export default function CheckoutPage() {
                   {money(sub)}
                 </span>
               </div>
-              <button className="btn btn-block btn-lg btn-ember" type="submit" disabled={busy} style={{ marginTop: 16 }}>
-                {busy ? 'Taking you to pay…' : `Pay ${money(sub)}`}
+              <button className="btn btn-block btn-lg" type="submit" disabled={busy} style={{ marginTop: 16 }}>
+                {busy ? 'Taking you to pay…' : `Pay securely — ${money(sub)}`}
               </button>
-              {error && <p className="caption err" style={{ marginTop: 10, color: 'var(--ember-deep)' }}>{error}</p>}
+              {error && <p className="caption err" style={{ marginTop: 10, color: '#b3261e' }}>{error}</p>}
+              <div className="cart-secure-row" style={{ marginTop: 12 }} aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="4" y="11" width="16" height="10" rx="2" />
+                  <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+                </svg>
+                <span>SSL-encrypted · Powered by Stripe</span>
+              </div>
               <div style={{ marginTop: 14 }}>
                 <SameDayCountdown />
               </div>
               <p className="caption" style={{ marginTop: 10 }}>
-                Secured by Stripe. We never store card details.
+                We never store card details.
               </p>
             </div>
           </aside>

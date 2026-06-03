@@ -10,7 +10,7 @@ export default function PrivacyPage() {
     <section className="section-sm bg-bone">
       <div className="container" style={{ maxWidth: 760 }}>
         <div className="marker">Legal</div>
-        <h1 className="h1 serif-em" style={{ marginTop: 8 }}>Privacy</h1>
+        <h1 className="h1" style={{ marginTop: 8 }}>Privacy</h1>
 
         <div className="legal-body">
           <p className="body-lg">

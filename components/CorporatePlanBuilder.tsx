@@ -42,7 +42,7 @@ export function CorporatePlanBuilder() {
   if (submitted) {
     return (
       <div className="card" style={{ borderColor: 'var(--sage)' }}>
-        <h2 className="h2 serif-em">Estimate sent.</h2>
+        <h2 className="h2">Estimate sent.</h2>
         <p className="body-lg" style={{ marginTop: 12, maxWidth: '54ch' }}>
           A senior florist will be in touch within four working hours to confirm cadence, sign off
           on the brief, and route a first delivery the same week.
@@ -66,7 +66,7 @@ export function CorporatePlanBuilder() {
               <span className="display" style={{ fontSize: 18 }}>
                 {opt.name}
               </span>
-              <span className="mono option-tile-price">{money(opt.perDelivery)} / delivery</span>
+              <span className="option-tile-price">{money(opt.perDelivery)} / delivery</span>
               <span className="caption">{opt.desc}</span>
             </button>
           ))}
@@ -104,14 +104,12 @@ export function CorporatePlanBuilder() {
 
           <div className="plan-readout">
             <span className="display" style={{ fontSize: 48, letterSpacing: '-0.01em' }}>{money(monthly)}</span>
-            <span className="mono" style={{ fontSize: 11, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--sage-deep)' }}>
-              / month · Net-30 invoice
-            </span>
+            <span className="plan-readout-unit">/ month · Net-30 invoice</span>
           </div>
 
           <ul className="plan-perks">
             {PROOF.map((p) => (
-              <li key={p}><span className="ember">●</span> {p}</li>
+              <li key={p}><span className="accent">●</span> {p}</li>
             ))}
           </ul>
 
@@ -144,8 +142,8 @@ export function CorporatePlanBuilder() {
             <input id="address" name="address" required />
           </div>
 
-          <button type="submit" className="btn btn-block btn-sage btn-lg" style={{ marginTop: 18 }}>
-            Route to a florist
+          <button type="submit" className="btn btn-block btn-lg" style={{ marginTop: 18 }}>
+            Get my estimate
           </button>
           <p className="caption" style={{ marginTop: 12 }}>
             A senior florist replies within 4 working hours. No card needed.

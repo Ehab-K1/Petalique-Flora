@@ -1,25 +1,32 @@
 import type { Metadata } from 'next';
 import { BouquetBuilder } from '@/components/BouquetBuilder';
+import { TrustBar } from '@/components/TrustBar';
 
 export const metadata: Metadata = {
-  title: 'Build a bouquet',
+  title: 'Build your own bouquet',
   description:
-    'Build a bouquet like a gift, not a configurator. Count, colour, wrap, ribbon, message and schedule — with a live preview the whole way.',
+    'Build a bouquet in under a minute. Pick count, colour, wrap, ribbon, gift message — see the price update as you go.',
 };
 
 export default function BuildPage() {
   return (
     <>
-      <section className="page-head bg-cream">
+      <section className="page-head bg-bone">
         <div className="container">
-          <div className="marker">03 — Build a bouquet</div>
-          <h1 className="h1 serif-em" style={{ marginTop: 10, maxWidth: '18ch' }}>
-            Build it like a <em>gift</em>, not a configurator.
+          <div className="marker">Build your own</div>
+          <h1 className="h1" style={{ marginTop: 10, maxWidth: '20ch' }}>
+            Build it in under a minute.
           </h1>
-          <p className="body-lg maxch" style={{ marginTop: 14 }}>
-            One question at a time. The preview never disappears, so you always see what you’re
-            sending before you pay. About sixty seconds, start to finish.
+          <p className="body-lg" style={{ marginTop: 14, maxWidth: '54ch' }}>
+            Pick the count, colour, wrap and ribbon. The price updates as you go. The preview
+            updates with every change. Same-day across the GTA.
           </p>
+        </div>
+      </section>
+
+      <section className="bg-paper">
+        <div className="container">
+          <TrustBar />
         </div>
       </section>
 

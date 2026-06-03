@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import { BouquetsBrowser } from '@/components/BouquetsBrowser';
+import { TrustBar } from '@/components/TrustBar';
 import type { Occasion } from '@/lib/types';
 import { OCCASIONS } from '@/lib/catalog';
 
 export const metadata: Metadata = {
-  title: 'Bouquets',
+  title: 'Shop bouquets',
   description:
-    'Rose-count-led luxury bouquets, same-day across the GTA. Filter by occasion, colour and price. Priced in the open.',
+    'Same-day rose delivery across the GTA. Hand-tied bouquets priced in the open — filter by occasion, colour and price, or build your own.',
 };
 
 export default async function BouquetsPage({
@@ -19,16 +20,22 @@ export default async function BouquetsPage({
 
   return (
     <>
-      <section className="page-head bg-cream">
+      <section className="page-head bg-bone">
         <div className="container">
-          <div className="marker">02 — Bouquets</div>
-          <h1 className="h1 serif-em" style={{ marginTop: 10, maxWidth: '16ch' }}>
-            Choose a bouquet, or make it <em>yours</em>.
+          <div className="marker">Shop</div>
+          <h1 className="h1" style={{ marginTop: 10, maxWidth: '18ch' }}>
+            Bouquets. Priced in the open. Delivered tonight.
           </h1>
-          <p className="body-lg maxch" style={{ marginTop: 14 }}>
-            Every bouquet is rose-count led and priced in the open. Pick one as it is, or open the
-            builder and choose your count, colour, wrap and ribbon.
+          <p className="body-lg" style={{ marginTop: 14, maxWidth: '54ch' }}>
+            Every bouquet is hand-tied to order. Filter by occasion, colour or price, or build
+            your own from 6 to 100 stems.
           </p>
+        </div>
+      </section>
+
+      <section className="bg-paper">
+        <div className="container">
+          <TrustBar />
         </div>
       </section>
 

@@ -3,14 +3,13 @@
 import { useMemo, useState } from 'react';
 import { HOME_TIERS, FREQUENCIES, monthlyEstimate, type FrequencyId } from '@/lib/plans';
 import { money } from '@/lib/pricing';
-import { Placeholder } from '@/components/Placeholder';
-import { Reveal } from '@/components/Reveal';
+import { ProductImage } from '@/components/ProductImage';
 
 const PERKS = [
-  'Vessel swapped + restyled at every visit',
-  'Free skip or pause any time — one tap',
-  'Anniversary remembered; never re-asked',
-  'Hand-tied at the atelier the morning of',
+  'Free delivery on every drop',
+  'Pause or skip any week — one tap',
+  'Cancel any time, no questions',
+  'Hand-tied the morning of your delivery',
 ];
 
 export function HomePlanBuilder() {
@@ -44,11 +43,11 @@ export function HomePlanBuilder() {
 
   if (submitted) {
     return (
-      <div className="card" style={{ borderColor: 'var(--sage)' }}>
-        <h2 className="h2 serif-em">Lovely. You’re on the list.</h2>
+      <div className="card" style={{ borderColor: 'var(--accent)' }}>
+        <h2 className="h2">You&rsquo;re on the list.</h2>
         <p className="body-lg" style={{ marginTop: 12, maxWidth: '50ch' }}>
-          A florist will confirm your first delivery within four working hours — and tell you what
-          you’ll be receiving first.
+          A florist will confirm your first delivery within four working hours and tell you
+          exactly what you&rsquo;ll be receiving.
         </p>
       </div>
     );
@@ -66,8 +65,8 @@ export function HomePlanBuilder() {
               className={`option-tile ${tier === opt.id ? 'on' : ''}`}
               onClick={() => setTier(opt.id)}
             >
-              <span className="display" style={{ fontSize: 18 }}>{opt.name}</span>
-              <span className="mono option-tile-price">{money(opt.perDelivery)} / delivery</span>
+              <span className="display" style={{ fontSize: 18, fontWeight: 500 }}>{opt.name}</span>
+              <span className="option-tile-price">{money(opt.perDelivery)} / delivery</span>
               <span className="caption">{opt.desc}</span>
             </button>
           ))}
@@ -97,24 +96,20 @@ export function HomePlanBuilder() {
       <aside className="plan-summary">
         <div className="card" style={{ background: 'var(--paper)' }}>
           <div className="field-label">Your plan</div>
-          <h3 className="h2" style={{ margin: '10px 0 6px' }}>
-            {t.name}
-          </h3>
+          <h3 className="h2" style={{ margin: '10px 0 6px' }}>{t.name}</h3>
           <p className="caption">{FREQUENCIES.find((f) => f.id === freq)!.name} delivery</p>
 
           <div className="plan-readout">
             <span className="display" style={{ fontSize: 44, letterSpacing: '-0.01em' }}>
               {money(total)}
             </span>
-            <span className="mono" style={{ fontSize: 11, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--sage-deep)' }}>
-              / month, billed monthly
-            </span>
+            <span className="plan-readout-unit">/ month, billed monthly</span>
           </div>
 
           <ul className="plan-perks">
             {PERKS.map((p) => (
               <li key={p}>
-                <span className="ember">●</span> {p}
+                <span className="accent">●</span> {p}
               </li>
             ))}
           </ul>
@@ -132,8 +127,8 @@ export function HomePlanBuilder() {
             <input id="address" name="address" placeholder="Street, unit, city, postal code" required />
           </div>
 
-          <button type="submit" className="btn btn-block btn-sage btn-lg" style={{ marginTop: 18 }}>
-            Start the plan
+          <button type="submit" className="btn btn-block btn-lg" style={{ marginTop: 18 }}>
+            Start my plan
           </button>
           <p className="caption" style={{ marginTop: 12 }}>
             No charge today. A florist confirms within 4 working hours.
@@ -144,38 +139,34 @@ export function HomePlanBuilder() {
   );
 }
 
-// Server-rendered wrapper used by the page below.
 export function SubscriptionsHero() {
   return (
     <>
-      <section className="page-head bg-cream">
+      <section className="page-head bg-bone">
         <div className="container">
-          <div className="marker">04 — Subscriptions · Lived Spaces</div>
-          <h1 className="h1 serif-em" style={{ marginTop: 10, maxWidth: '20ch' }}>
-            Standing flowers, for the table you <em>live at</em>.
+          <div className="marker">Subscriptions</div>
+          <h1 className="h1" style={{ marginTop: 10, maxWidth: '20ch' }}>
+            Fresh flowers, every week. Without thinking about it.
           </h1>
-          <p className="body-lg maxch" style={{ marginTop: 14 }}>
-            One arrangement, designed for your room, delivered the same morning each week. Skip a
-            week any time. Cancel any time. The vessel is part of it.
+          <p className="body-lg" style={{ marginTop: 14, maxWidth: '54ch' }}>
+            One arrangement, designed for your room, delivered the same morning each week. Pause
+            any time. Cancel any time. From $45 per delivery.
           </p>
         </div>
       </section>
 
-      <section className="section-sm bg-bone">
+      <section className="section-sm bg-paper">
         <div className="container">
           <div className="subs-visual">
-            <Reveal>
-              <Placeholder label="Standing kitchen arrangement · 4:5 · morning" tone="sage" ratio="4 / 5" />
-            </Reveal>
-            <Reveal delay={80}>
-              <div>
-                <h2 className="h2" style={{ maxWidth: '20ch' }}>The most quietly loved service we offer.</h2>
-                <p className="body-lg" style={{ marginTop: 14, maxWidth: '44ch' }}>
-                  Our subscriptions are designed the same way our weddings are — composed for the
-                  room, named after the moment. They’re also where our team comes to know your home.
-                </p>
-              </div>
-            </Reveal>
+            <ProductImage slug="subscription-home" alt="A weekly arrangement on a kitchen counter" ratio="4/5" sizes="(max-width: 900px) 100vw, 480px" />
+            <div>
+              <h2 className="h2" style={{ maxWidth: '22ch' }}>The most quietly loved thing we make.</h2>
+              <p className="body-lg" style={{ marginTop: 14, maxWidth: '46ch' }}>
+                Subscriptions are designed the way our weddings are — composed for the room,
+                hand-tied that morning, swapped in your vessel so nothing ever lingers past its
+                peak.
+              </p>
+            </div>
           </div>
         </div>
       </section>

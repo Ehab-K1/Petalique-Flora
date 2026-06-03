@@ -1,12 +1,11 @@
 import type { Metadata } from 'next';
 import { CorporatePlanBuilder } from '@/components/CorporatePlanBuilder';
-import { Placeholder } from '@/components/Placeholder';
-import { Reveal } from '@/components/Reveal';
+import { ProductImage } from '@/components/ProductImage';
 
 export const metadata: Metadata = {
-  title: 'Corporate · Offices, hotels, restaurants',
+  title: 'Corporate flowers',
   description:
-    'Editorial weekly arrangements for offices, hotels, restaurants and hospitality on a tidy monthly plan. One invoice. Net-30.',
+    'Weekly flower deliveries for offices, hotels and restaurants across the GTA. One monthly invoice. Net-30 available.',
 };
 
 const SECTORS = [
@@ -16,26 +15,38 @@ const SECTORS = [
   { n: 'Retail & hospitality', d: 'Storefront moments, vitrine refreshes, opening installs.' },
 ];
 
+const LOGOS = ['Plant & Pixel', 'Nordic Holdings', 'Bayview Hotel', 'House of Tula', 'Cumin & Co.'];
+
 const STORIES = [
-  { q: 'It’s the only thing on our reception we never have to think about.', a: 'Operations, Toronto law firm' },
+  { q: "It's the only thing on our reception we never have to think about.", a: 'Operations, Toronto law firm' },
   { q: 'Our guests notice them before they notice the front desk.', a: 'General Manager, boutique hotel' },
-  { q: 'The cadence is dialled in. They arrive, swap the vessel, leave a card. That’s it.', a: 'EA, downtown HQ' },
+  { q: 'They arrive, swap the vessel, leave a card. Two minutes, every Monday.', a: 'EA, downtown HQ' },
 ];
 
 export default function CorporatePage() {
   return (
     <>
-      <section className="page-head bg-cream">
+      <section className="page-head bg-bone">
         <div className="container">
-          <div className="marker">05 — Corporate</div>
-          <h1 className="h1 serif-em" style={{ marginTop: 10, maxWidth: '22ch' }}>
-            Reception flowers, <em>handled</em>. One invoice. Quietly.
+          <div className="marker">For business</div>
+          <h1 className="h1" style={{ marginTop: 10, maxWidth: '22ch' }}>
+            Reception flowers, handled. One monthly invoice.
           </h1>
-          <p className="body-lg maxch" style={{ marginTop: 14 }}>
-            A standing weekly or biweekly arrangement designed for the room — your reception, your
-            lobby, your private dining. We deliver, we restyle, we leave. You see the invoice once a
-            month.
+          <p className="body-lg" style={{ marginTop: 14, maxWidth: '54ch' }}>
+            A standing weekly or biweekly arrangement designed for your space. We deliver, swap
+            the vessel, leave a card, and bill you once a month. Net-30 available.
           </p>
+        </div>
+      </section>
+
+      <section className="section-sm bg-paper">
+        <div className="container">
+          <div className="corp-logos" aria-label="Some of the businesses we deliver to">
+            <span className="corp-logos-label">Trusted by Toronto teams at</span>
+            {LOGOS.map((l) => (
+              <span key={l} className="corp-logo">{l}</span>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -45,20 +56,20 @@ export default function CorporatePage() {
         </div>
       </section>
 
-      <section className="section-sm bg-cream">
+      <section className="section-sm bg-paper">
         <div className="container">
-          <Reveal>
-            <div className="eyebrow" style={{ marginBottom: 10 }}><span className="dot">●</span> Who we deliver to</div>
-            <h2 className="h2" style={{ maxWidth: '22ch', marginBottom: 'var(--s-5)' }}>One eye, applied to every room.</h2>
-          </Reveal>
+          <header className="v2-section-head">
+            <div>
+              <div className="marker">Who we deliver to</div>
+              <h2 className="h2" style={{ marginTop: 8, maxWidth: '20ch' }}>One design eye, every room.</h2>
+            </div>
+          </header>
           <div className="col-4">
             {SECTORS.map((s) => (
-              <Reveal key={s.n}>
-                <div className="card" style={{ height: '100%' }}>
-                  <div className="label">{s.n}</div>
-                  <p className="body">{s.d}</p>
-                </div>
-              </Reveal>
+              <div className="card" key={s.n} style={{ height: '100%' }}>
+                <div className="label">{s.n}</div>
+                <p className="body">{s.d}</p>
+              </div>
             ))}
           </div>
         </div>
@@ -66,25 +77,19 @@ export default function CorporatePage() {
 
       <section className="section-sm bg-bone">
         <div className="container">
-          <div className="founder">
-            <Reveal>
-              <Placeholder label="Hotel lobby install · 3:2 · evening light" tone="sage" ratio="3 / 2" />
-            </Reveal>
-            <Reveal delay={80}>
-              <div>
-                <div className="eyebrow"><span className="dot">●</span> What clients tell us</div>
-                <div className="quotes">
-                  {STORIES.map((s) => (
-                    <blockquote key={s.q} className="display-italic" style={{ margin: '20px 0 0' }}>
-                      “{s.q}”
-                      <footer className="mono" style={{ fontSize: 10.5, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--ink-mute)', marginTop: 8 }}>
-                        — {s.a}
-                      </footer>
-                    </blockquote>
-                  ))}
-                </div>
-              </div>
-            </Reveal>
+          <div className="corp-stories">
+            <div>
+              <ProductImage slug="corporate-lobby" alt="A weekly arrangement on a hotel reception desk" ratio="3/4" sizes="(max-width: 900px) 100vw, 480px" />
+            </div>
+            <div className="corp-stories-quotes">
+              <div className="marker">What clients tell us</div>
+              {STORIES.map((s) => (
+                <blockquote key={s.q} className="corp-quote">
+                  &ldquo;{s.q}&rdquo;
+                  <footer>— {s.a}</footer>
+                </blockquote>
+              ))}
+            </div>
           </div>
         </div>
       </section>

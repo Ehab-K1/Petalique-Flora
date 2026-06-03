@@ -89,8 +89,8 @@ export function BouquetQuiz() {
         <div className="eyebrow" style={{ justifyContent: 'center', marginBottom: 10 }}>
           <span className="dot">●</span> Three you should consider
         </div>
-        <h2 className="h1 serif-em center-text" style={{ maxWidth: '20ch', margin: '0 auto 28px' }}>
-          We’d send one of these.
+        <h2 className="h1 center-text" style={{ maxWidth: '20ch', margin: '0 auto 28px' }}>
+          We&rsquo;d send one of these.
         </h2>
         <div className="product-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
           {recs.map((p) => <ProductCard key={p.slug} product={p} />)}
@@ -116,7 +116,7 @@ export function BouquetQuiz() {
       <div className="mono center-text muted" style={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase' }}>
         Question {step + 1} of {Q.length}
       </div>
-      <h2 className="h1 serif-em center-text" style={{ maxWidth: '22ch', margin: '14px auto 28px' }}>
+      <h2 className="h1 center-text" style={{ maxWidth: '22ch', margin: '14px auto 28px' }}>
         {current.q}
       </h2>
       <div className="grid gap-3" style={{ maxWidth: 520, margin: '0 auto' }}>

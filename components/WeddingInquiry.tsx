@@ -38,12 +38,12 @@ export function WeddingInquiry() {
 
   if (submitted) {
     return (
-      <div className="card" style={{ borderColor: 'var(--ember)' }}>
+      <div className="card" style={{ borderColor: 'var(--accent)' }}>
         <div className="eyebrow" style={{ marginBottom: 10 }}><span className="dot">●</span> Received</div>
-        <h2 className="h2 serif-em">We have it. A florist replies within four working hours.</h2>
+        <h2 className="h2">Your inquiry is in. A florist replies within four working hours.</h2>
         <p className="body-lg" style={{ marginTop: 12, maxWidth: '54ch' }}>
-          You’ll get a short note confirming we’ve read it, and a proposal deck — moodboards,
-          installations sketched, packages applied to your day — within seventy-two hours.
+          You&rsquo;ll get a short note confirming we&rsquo;ve read it, and a proposal deck with
+          moodboards, installations sketched and packages applied — within seventy-two hours.
         </p>
       </div>
     );
@@ -137,8 +137,8 @@ export function WeddingInquiry() {
         )}
       </div>
 
-      <button type="submit" className="btn btn-block btn-ember btn-lg" style={{ marginTop: 18 }}>
-        Send to the atelier
+      <button type="submit" className="btn btn-block btn-lg" style={{ marginTop: 18 }}>
+        Send my inquiry
       </button>
       <p className="caption" style={{ marginTop: 12 }}>
         Florist replies within 4 working hours. Proposal deck within 72 hours.

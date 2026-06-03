@@ -13,7 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/corporate', priority: 0.85 },
     { path: '/wholesale', priority: 0.75 },
     { path: '/weddings', priority: 0.9 },
-    { path: '/atelier', priority: 0.6 },
+    { path: '/about', priority: 0.6 },
     { path: '/track', priority: 0.3 },
     { path: '/privacy', priority: 0.2 },
     { path: '/terms', priority: 0.2 },

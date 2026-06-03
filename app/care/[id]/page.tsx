@@ -1,44 +1,49 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Placeholder } from '@/components/Placeholder';
 
 export const metadata: Metadata = {
   title: 'A note from the florist',
-  description: 'The 30-second film of your bouquet being made, with care notes from the team.',
+  description: 'Care notes for your Petalique bouquet, plus a 30-second studio video.',
 };
 
-// Care-card QR landing. The QR on every recipient card resolves here.
-// The id is the bouquet/order reference; in production the page would also
-// embed the 30-second atelier film keyed by that id.
+const CARE = [
+  { h: 'Cut on the angle', d: 'Trim 1 cm off each stem at 45° before they go in water.' },
+  { h: 'Change the water', d: 'Every other day. The fresher the water, the longer the bloom.' },
+  { h: 'Keep them cool', d: 'Out of direct sun, away from radiators, never beside fruit.' },
+  { h: 'Re-trim mid-week', d: 'On day 4, take another half-centimetre off each stem.' },
+];
+
 export default async function CareCardPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   return (
     <section className="section bg-aubergine on-dark">
       <div className="container" style={{ maxWidth: 760, textAlign: 'center' }}>
-        <div className="eyebrow" style={{ color: 'rgba(239,232,221,0.55)', justifyContent: 'center', marginBottom: 18 }}>
-          <span className="dot">●</span> A note from the atelier
+        <div className="eyebrow" style={{ color: 'rgba(250,248,244,0.6)', justifyContent: 'center', marginBottom: 18 }}>
+          <span className="dot">●</span> A note from the studio
         </div>
-        <h1 className="h1 on-dark serif-em" style={{ marginBottom: 24, maxWidth: '20ch', marginInline: 'auto' }}>
-          Made for <em>you</em>, by hand.
+        <h1 className="h1 on-dark" style={{ marginBottom: 14, maxWidth: '22ch', marginInline: 'auto' }}>
+          Made for you, by hand.
         </h1>
-
-        <div style={{ borderRadius: 'var(--radius-l)', overflow: 'hidden', border: '1px solid rgba(239,232,221,0.2)' }}>
-          <Placeholder label={`Atelier film · 9:16 · 30 seconds · ${id}`} tone="aubergine" ratio="9 / 16" />
-        </div>
-
-        <p className="display-italic" style={{ fontSize: 22, color: 'var(--bone)', marginTop: 28 }}>
-          “Cut on the angle, fresh water every other day, and they’ll open by the weekend.”
-        </p>
-        <p className="mono" style={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(239,232,221,0.55)', marginTop: 12 }}>
-          — Signed, the florist who made it
+        <p className="body-lg" style={{ color: 'rgba(250,248,244,0.82)', maxWidth: '54ch', marginInline: 'auto' }}>
+          Here&rsquo;s how to keep your bouquet at its best — and a short studio film of the
+          florist who made it.
         </p>
 
-        <div className="center" style={{ justifyContent: 'center', gap: 12, marginTop: 32 }}>
-          <Link href="/atelier#care" className="btn">How to keep them</Link>
-          <Link href="/" className="btn btn-ghost">Send your own</Link>
+        <div className="care-grid">
+          {CARE.map((c) => (
+            <div key={c.h} className="care-card">
+              <div className="care-card-h">{c.h}</div>
+              <p className="caption">{c.d}</p>
+            </div>
+          ))}
         </div>
-        <p className="caption" style={{ color: 'rgba(239,232,221,0.55)', marginTop: 22 }}>
-          Reference {id} · keep this card for the anniversary reorder
+
+        <div className="center" style={{ justifyContent: 'center', gap: 12, marginTop: 32, flexWrap: 'wrap' }}>
+          <Link href="/bouquets" className="btn">Send one yourself</Link>
+          <Link href="/subscriptions" className="btn btn-ghost">Make it weekly</Link>
+        </div>
+        <p className="caption" style={{ color: 'rgba(250,248,244,0.55)', marginTop: 22 }}>
+          Reference {id} · keep this for the anniversary reorder
         </p>
       </div>
     </section>
