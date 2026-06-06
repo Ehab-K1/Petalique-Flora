@@ -1,9 +1,16 @@
-import type { MetadataRoute } from 'next';
+import type { MetadataRoute } from "next";
+
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://petaliqueflora.com";
 
 export default function robots(): MetadataRoute.Robots {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || 'https://petalique.com';
   return {
-    rules: [{ userAgent: '*', allow: '/', disallow: ['/api/', '/checkout', '/cart', '/care/'] }],
-    sitemap: `${base}/sitemap.xml`,
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/admin", "/api/", "/account", "/wholesale/dashboard", "/planner/dashboard"],
+      },
+    ],
+    sitemap: `${BASE_URL}/sitemap.xml`,
   };
 }

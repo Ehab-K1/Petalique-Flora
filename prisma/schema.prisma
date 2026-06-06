@@ -1,0 +1,684 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── ENUMS ─────────────────────────────────────────────────────────────────
+
+enum Role {
+  CUSTOMER
+  WHOLESALE
+  PLANNER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  FULFILLED
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+  PARTIAL_REFUND
+}
+
+enum WholesaleTier {
+  BRONZE
+  SILVER
+  GOLD
+  PLATINUM
+}
+
+enum AccountStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  REJECTED
+}
+
+enum ConsultationType {
+  WEDDING
+  EVENT
+  CORPORATE
+  CUSTOM
+}
+
+enum QuoteStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  REJECTED
+  EXPIRED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+// ─── AUTHENTICATION ──────────────────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  phone         String?
+  role          Role      @default(CUSTOMER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts         Account[]
+  sessions         Session[]
+  addresses        Address[]
+  orders           Order[]
+  wishlist         WishlistItem[]
+  reviews          Review[]
+  consultations    Consultation[]
+  notifications    Notification[]
+  auditLogs        AuditLog[]
+  wholesaleAccount WholesaleAccount?
+  plannerAccount   PlannerAccount?
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// ─── ADDRESS ─────────────────────────────────────────────────────────────────
+
+model Address {
+  id         String  @id @default(cuid())
+  userId     String
+  label      String?
+  firstName  String
+  lastName   String
+  company    String?
+  line1      String
+  line2      String?
+  city       String
+  province   String
+  postalCode String
+  country    String  @default("CA")
+  phone      String?
+  isDefault  Boolean @default(false)
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders Order[]
+
+  @@map("addresses")
+}
+
+// ─── PRODUCTS ────────────────────────────────────────────────────────────────
+
+model Category {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String  @unique
+  description String?
+  image       String?
+  parentId    String?
+  sortOrder   Int     @default(0)
+  isActive    Boolean @default(true)
+  seoTitle    String?
+  seoDesc     String?
+
+  parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryTree")
+  products Product[]
+
+  @@map("categories")
+}
+
+model Collection {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  image       String?
+  isActive    Boolean  @default(true)
+  isFeatured  Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  products CollectionProduct[]
+
+  @@map("collections")
+}
+
+model CollectionProduct {
+  collectionId String
+  productId    String
+  sortOrder    Int    @default(0)
+
+  collection Collection @relation(fields: [collectionId], references: [id])
+  product    Product    @relation(fields: [productId], references: [id])
+
+  @@id([collectionId, productId])
+  @@map("collection_products")
+}
+
+model Product {
+  id            String   @id @default(cuid())
+  name          String
+  slug          String   @unique
+  description   String?  @db.Text
+  shortDesc     String?
+  categoryId    String?
+  price         Decimal  @db.Decimal(10, 2)
+  comparePrice  Decimal? @db.Decimal(10, 2)
+  costPrice     Decimal? @db.Decimal(10, 2)
+  sku           String?  @unique
+  barcode       String?
+  weight        Float?
+  isActive      Boolean  @default(true)
+  isFeatured    Boolean  @default(false)
+  isGiftable    Boolean  @default(false)
+  requiresDeliveryDate Boolean @default(false)
+  tags          String[]
+  images        String[]
+  videoUrl      String?
+  seoTitle      String?
+  seoDesc       String?
+  seoKeywords   String[]
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  category    Category?           @relation(fields: [categoryId], references: [id])
+  variants    ProductVariant[]
+  inventory   Inventory?
+  orderItems  OrderItem[]
+  wishlist    WishlistItem[]
+  reviews     Review[]
+  collections CollectionProduct[]
+  wholesale   WholesaleProduct[]
+
+  @@map("products")
+}
+
+model ProductVariant {
+  id         String   @id @default(cuid())
+  productId  String
+  name       String
+  sku        String?  @unique
+  price      Decimal  @db.Decimal(10, 2)
+  images     String[]
+  options    Json
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  product    Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  inventory  Inventory?
+  orderItems OrderItem[]
+
+  @@map("product_variants")
+}
+
+model Inventory {
+  id               String   @id @default(cuid())
+  productId        String?  @unique
+  variantId        String?  @unique
+  quantity         Int      @default(0)
+  reservedQuantity Int      @default(0)
+  lowStockAt       Int      @default(5)
+  trackInventory   Boolean  @default(true)
+  allowBackorder   Boolean  @default(false)
+  updatedAt        DateTime @updatedAt
+
+  product Product?       @relation(fields: [productId], references: [id])
+  variant ProductVariant? @relation(fields: [variantId], references: [id])
+
+  @@map("inventory")
+}
+
+// ─── ORDERS ──────────────────────────────────────────────────────────────────
+
+model Order {
+  id              String        @id @default(cuid())
+  orderNumber     String        @unique
+  userId          String?
+  addressId       String?
+  status          OrderStatus   @default(PENDING)
+  paymentStatus   PaymentStatus @default(PENDING)
+  stripePaymentId String?
+  stripeSessionId String?
+  subtotal        Decimal       @db.Decimal(10, 2)
+  tax             Decimal       @db.Decimal(10, 2)
+  shipping        Decimal       @db.Decimal(10, 2)
+  discount        Decimal       @db.Decimal(10, 2) @default(0)
+  total           Decimal       @db.Decimal(10, 2)
+  currency        String        @default("CAD")
+  notes           String?
+  giftMessage     String?
+  deliveryDate    DateTime?
+  deliveryTime    String?
+  trackingNumber  String?
+  carrier         String?
+  guestEmail      String?
+  guestName       String?
+  guestPhone      String?
+  promoCode       String?
+  metadata        Json?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  user     User?       @relation(fields: [userId], references: [id])
+  address  Address?    @relation(fields: [addressId], references: [id])
+  items    OrderItem[]
+  invoice  Invoice?
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String
+  variantId String?
+  quantity  Int
+  price     Decimal @db.Decimal(10, 2)
+  total     Decimal @db.Decimal(10, 2)
+  name      String
+  image     String?
+  options   Json?
+
+  order   Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product        @relation(fields: [productId], references: [id])
+  variant ProductVariant? @relation(fields: [variantId], references: [id])
+
+  @@map("order_items")
+}
+
+// ─── WISHLIST ─────────────────────────────────────────────────────────────────
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  addedAt   DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("wishlist_items")
+}
+
+// ─── CONSULTATION & QUOTES ───────────────────────────────────────────────────
+
+model Consultation {
+  id              String           @id @default(cuid())
+  userId          String?
+  type            ConsultationType
+  name            String
+  email           String
+  phone           String?
+  weddingDate     DateTime?
+  venue           String?
+  guestCount      Int?
+  budget          String?
+  vision          String?          @db.Text
+  inspirationUrls String[]
+  status          String           @default("NEW")
+  notes           String?          @db.Text
+  assignedTo      String?
+  followUpAt      DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  user  User?  @relation(fields: [userId], references: [id])
+  quote Quote?
+
+  @@map("consultations")
+}
+
+model Quote {
+  id             String      @id @default(cuid())
+  consultationId String?     @unique
+  userId         String?
+  quoteNumber    String      @unique
+  status         QuoteStatus @default(DRAFT)
+  items          Json
+  subtotal       Decimal     @db.Decimal(10, 2)
+  tax            Decimal     @db.Decimal(10, 2)
+  total          Decimal     @db.Decimal(10, 2)
+  validUntil     DateTime?
+  notes          String?     @db.Text
+  termsAccepted  Boolean     @default(false)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  consultation Consultation? @relation(fields: [consultationId], references: [id])
+  invoice      Invoice?
+
+  @@map("quotes")
+}
+
+// ─── INVOICE ─────────────────────────────────────────────────────────────────
+
+model Invoice {
+  id            String        @id @default(cuid())
+  orderId       String?       @unique
+  quoteId       String?       @unique
+  invoiceNumber String        @unique
+  status        InvoiceStatus @default(DRAFT)
+  dueDate       DateTime?
+  paidAt        DateTime?
+  subtotal      Decimal       @db.Decimal(10, 2)
+  tax           Decimal       @db.Decimal(10, 2)
+  total         Decimal       @db.Decimal(10, 2)
+  notes         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  order Order? @relation(fields: [orderId], references: [id])
+  quote Quote? @relation(fields: [quoteId], references: [id])
+
+  @@map("invoices")
+}
+
+// ─── WHOLESALE ───────────────────────────────────────────────────────────────
+
+model WholesaleAccount {
+  id              String         @id @default(cuid())
+  userId          String         @unique
+  businessName    String
+  website         String?
+  businessLicense String?
+  taxNumber       String?
+  tier            WholesaleTier  @default(BRONZE)
+  status          AccountStatus  @default(PENDING)
+  creditLimit     Decimal?       @db.Decimal(10, 2)
+  paymentTerms    Int            @default(30)
+  notes           String?        @db.Text
+  approvedAt      DateTime?
+  approvedBy      String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  user   User              @relation(fields: [userId], references: [id])
+  orders WholesaleOrder[]
+
+  @@map("wholesale_accounts")
+}
+
+model WholesaleOrder {
+  id               String        @id @default(cuid())
+  accountId        String
+  orderNumber      String        @unique
+  status           OrderStatus   @default(PENDING)
+  paymentStatus    PaymentStatus @default(PENDING)
+  items            Json
+  subtotal         Decimal       @db.Decimal(10, 2)
+  tax              Decimal       @db.Decimal(10, 2)
+  total            Decimal       @db.Decimal(10, 2)
+  discount         Decimal       @db.Decimal(10, 2) @default(0)
+  requestedDate    DateTime?
+  notes            String?
+  internalNotes    String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  account WholesaleAccount @relation(fields: [accountId], references: [id])
+
+  @@map("wholesale_orders")
+}
+
+model WholesaleProduct {
+  productId      String
+  tier           WholesaleTier
+  price          Decimal       @db.Decimal(10, 2)
+  minQuantity    Int           @default(1)
+  isActive       Boolean       @default(true)
+
+  product Product @relation(fields: [productId], references: [id])
+
+  @@id([productId, tier])
+  @@map("wholesale_products")
+}
+
+// ─── PLANNER ─────────────────────────────────────────────────────────────────
+
+model PlannerAccount {
+  id           String        @id @default(cuid())
+  userId       String        @unique
+  businessName String
+  website      String?
+  portfolio    String?
+  status       AccountStatus @default(PENDING)
+  commission   Float         @default(0.1)
+  notes        String?       @db.Text
+  approvedAt   DateTime?
+  approvedBy   String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  user     User              @relation(fields: [userId], references: [id])
+  projects PlannerProject[]
+
+  @@map("planner_accounts")
+}
+
+model PlannerProject {
+  id           String   @id @default(cuid())
+  accountId    String
+  name         String
+  clientName   String
+  clientEmail  String?
+  clientPhone  String?
+  eventDate    DateTime?
+  venue        String?
+  budget       Decimal? @db.Decimal(10, 2)
+  status       String   @default("ACTIVE")
+  notes        String?  @db.Text
+  moodBoard    Json?
+  proposal     Json?
+  timeline     Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  account PlannerAccount @relation(fields: [accountId], references: [id])
+
+  @@map("planner_projects")
+}
+
+// ─── CONTENT ──────────────────────────────────────────────────────────────────
+
+model Review {
+  id         String   @id @default(cuid())
+  productId  String
+  userId     String?
+  guestName  String?
+  guestEmail String?
+  rating     Int
+  title      String?
+  body       String   @db.Text
+  isVerified Boolean  @default(false)
+  isApproved Boolean  @default(false)
+  images     String[]
+  createdAt  DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user    User?   @relation(fields: [userId], references: [id])
+
+  @@map("reviews")
+}
+
+model Testimonial {
+  id          String   @id @default(cuid())
+  name        String
+  role        String?
+  company     String?
+  body        String   @db.Text
+  rating      Int?
+  image       String?
+  videoUrl    String?
+  isApproved  Boolean  @default(false)
+  isFeatured  Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  source      String?
+  sourceUrl   String?
+  weddingDate String?
+  venue       String?
+  createdAt   DateTime @default(now())
+
+  @@map("testimonials")
+}
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  excerpt     String?
+  content     String   @db.Text
+  coverImage  String?
+  authorId    String?
+  authorName  String?
+  tags        String[]
+  category    String?
+  isPublished Boolean  @default(false)
+  publishedAt DateTime?
+  seoTitle    String?
+  seoDesc     String?
+  readTime    Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("blog_posts")
+}
+
+model GalleryItem {
+  id          String   @id @default(cuid())
+  title       String?
+  description String?
+  imageUrl    String
+  category    String?
+  tags        String[]
+  isFeatured  Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@map("gallery_items")
+}
+
+model Media {
+  id        String   @id @default(cuid())
+  name      String
+  url       String
+  type      String
+  size      Int?
+  width     Int?
+  height    Int?
+  alt       String?
+  folder    String?
+  createdAt DateTime @default(now())
+
+  @@map("media")
+}
+
+// ─── SYSTEM ──────────────────────────────────────────────────────────────────
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String
+  title     String
+  body      String?
+  isRead    Boolean  @default(false)
+  data      Json?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  resource  String
+  resourceId String?
+  before    Json?
+  after     Json?
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("audit_logs")
+}
+
+model PromoCode {
+  id              String   @id @default(cuid())
+  code            String   @unique
+  type            String   // PERCENTAGE | FIXED | FREE_SHIPPING
+  value           Decimal  @db.Decimal(10, 2)
+  minOrderAmount  Decimal? @db.Decimal(10, 2)
+  maxUses         Int?
+  usedCount       Int      @default(0)
+  isActive        Boolean  @default(true)
+  expiresAt       DateTime?
+  createdAt       DateTime @default(now())
+
+  @@map("promo_codes")
+}
